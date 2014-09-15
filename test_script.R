@@ -36,8 +36,10 @@ else
 {
   full_url <- paste(base_url,series_id, url_api, type, sep="")
 
+# Load JSON object
 doc <- fromJSON(full_url)
 
+# Convert JSON object to data frame for processing
 assign(series_id, data.frame(doc$observations))
 
 drops <- c("realtime_start","realtime_end")
@@ -50,32 +52,34 @@ ECOMNSA$value <- as.numeric(ECOMNSA$value)
 
 plot(ECOMNSA,type = 'l' )
 
+# Calculate order of magnitude.
 mag <- lapply(as.numeric(ECOMNSA$value), function(x) 10^(floor(log10(x))))
 
 # Create magnitude column
 ECOMNSA$mag <- mag
 
-
-## Calculate SD of percent change
-
-# Drop NA values
-good <- complete.cases(ECOMNSA$value)
-ECOMNSA <- ECOMNSA[good,]
-
-# Find mean
-mean <- mean(ECOMNSA$value)
-
-# Find distance from mean for each observation via anonymous function
-diff <- lapply(ECOMNSA$value, function(x) x - mean)
-
-# Square the distance to get rid of negative values
-sqr <- lapply(diff, function(x) x*x)
-
-# Sum the values of all squared observations
-sqr_sum <- sum(as.numeric(sqr))
-
-# Find divided sum of squares
-dvd_sum_sqrs <- sqr_sum/(as.numeric(length(sqr)-1))
-
-# Take square root of divided sum of squares to get SD.
-sd_pct_chg <- sqrt(dvd_sum_sqrs)
+if (units == grep('pct1',units)) {
+  ## Calculate SD of percent change
+  
+  # Drop NA values
+  good <- complete.cases(ECOMNSA$value)
+  ECOMNSA <- ECOMNSA[good,]
+  
+  # Find mean
+  mean <- mean(ECOMNSA$value)
+  
+  # Find distance from mean for each observation via anonymous function
+  diff <- lapply(ECOMNSA$value, function(x) x - mean)
+  
+  # Square the distance to get rid of negative values
+  sqr <- lapply(diff, function(x) x*x)
+  
+  # Sum the values of all squared observations
+  sqr_sum <- sum(as.numeric(sqr))
+  
+  # Find divided sum of squares
+  dvd_sum_sqrs <- sqr_sum/(as.numeric(length(sqr)-1))
+  
+  # Take square root of divided sum of squares to get SD.
+  sd_pct_chg <- sqrt(dvd_sum_sqrs)
+}  
