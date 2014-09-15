@@ -52,13 +52,30 @@ plot(ECOMNSA,type = 'l' )
 
 mag <- lapply(as.numeric(ECOMNSA$value), function(x) 10^(floor(log10(x))))
 
+# Create magnitude column
 ECOMNSA$mag <- mag
 
+
+## Calculate SD of percent change
+
+# Drop NA values
 good <- complete.cases(ECOMNSA$value)
 ECOMNSA <- ECOMNSA[good,]
+
+# Find mean
 mean <- mean(ECOMNSA$value)
+
+# Find distance from mean for each observation via anonymous function
 diff <- lapply(ECOMNSA$value, function(x) x - mean)
+
+# Square the distance to get rid of negative values
 sqr <- lapply(diff, function(x) x*x)
+
+# Sum the values of all squared observations
 sqr_sum <- sum(as.numeric(sqr))
-dvd_sum_sqrs <- sqr_sum/as.numeric(length(sqr))
+
+# Find divided sum of squares
+dvd_sum_sqrs <- sqr_sum/(as.numeric(length(sqr)-1))
+
+# Take square root of divided sum of squares to get SD.
 sd_pct_chg <- sqrt(dvd_sum_sqrs)
