@@ -30,13 +30,13 @@ get_vintages <- function(series_id) {
 
 base_url <- "http://api.stlouisfed.org/fred/series/observations?series_id="
 
-series_id <- "ECOMNSA"
+series_id <- "DGORDER"
 
 url_api <- "&api_key=76bb1186e704598b725af0a27159fdfc"
 
 type <- "&file_type=json"
 
-units <- "&units=pc1"
+units <- "&units=pca"
 
 vintage_date <-  
   
@@ -44,7 +44,7 @@ vintage <- TRUE
 
 
 if (vintage == TRUE) {
-  full_url <- paste(base_url,series_id, url_api, type, sep="")
+  full_url <- paste(base_url,series_id, url_api, units, type, sep="")
 } else {
   full_url <- paste(base_url,series_id, url_api, type, sep="")
 }
@@ -53,20 +53,22 @@ if (vintage == TRUE) {
 doc <- fromJSON(full_url)
 
 # Convert JSON object to data frame for processing
-assign(series_id, data.frame(doc$observations))
+# assign(series_id, data.frame(doc$observations))
+ECOMNSA <- data.frame(doc$observations)
 
 drops <- c("realtime_start","realtime_end")
 ECOMNSA <- ECOMNSA[,!(names(ECOMNSA) %in% drops)]
 ECOMNSA$date <- strptime(ECOMNSA$date, format="%Y-%m-%d")
 ECOMNSA$value <- as.numeric(ECOMNSA$value)
-# 
-# good <- complete.cases(ECOMNSA)
-# ECOMNSA <- ECOMNSA[good,]
-
+ECOMNSA <- na.omit(ECOMNSA)
 plot(ECOMNSA,type = 'l' )
 
 # Calculate order of magnitude.
-mag <- lapply(as.numeric(ECOMNSA$value), function(x) 10^(floor(log10(x))))
+ECOMNSA$mag <- lapply(as.numeric(ECOMNSA$sqrt), function(x) 10^(ceiling(log10(x))))
+
+ECOMNSA$sq <- lapply(ECOMNSA$value, function(x) x^2)
+
+ECOMNSA$sqrt <- lapply(ECOMNSA$value, function(x) sqrt(x^2))
 
 # Create magnitude column
 ECOMNSA$mag <- mag
