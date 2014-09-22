@@ -55,7 +55,6 @@ doc <- fromJSON(full_url)
 # Convert JSON object to data frame for processing
 # assign(series_id, data.frame(doc$observations))
 ECOMNSA <- data.frame(doc$observations)
-
 drops <- c("realtime_start","realtime_end")
 ECOMNSA <- ECOMNSA[,!(names(ECOMNSA) %in% drops)]
 ECOMNSA$date <- strptime(ECOMNSA$date, format="%Y-%m-%d")
