@@ -62,12 +62,12 @@ ECOMNSA$value <- as.numeric(ECOMNSA$value)
 ECOMNSA <- na.omit(ECOMNSA)
 plot(ECOMNSA,type = 'l' )
 
-# Calculate order of magnitude.
-ECOMNSA$mag <- lapply(as.numeric(ECOMNSA$sqrt), function(x) 10^(ceiling(log10(x))))
-
 ECOMNSA$sq <- lapply(ECOMNSA$value, function(x) x^2)
 
 ECOMNSA$sqrt <- lapply(ECOMNSA$value, function(x) sqrt(x^2))
+
+# Calculate order of magnitude.
+ECOMNSA$mag <- lapply(as.numeric(ECOMNSA$sqrt), function(x) 10^(ceiling(log10(x))))
 
 # Create magnitude column
 ECOMNSA$mag <- mag
