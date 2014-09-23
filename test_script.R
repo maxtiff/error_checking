@@ -4,29 +4,7 @@ library(forecast)
 ## Order of magnitude funciton that is used anonymously instead.
 # log10_ceiling <- function(x) {
 #   10^(ceiling(log10(x)))
-# }
-
-set_base_url <- function(series) {
-  url <- "http://api.stlouisfed.org/fred/series/observations?series_id="
-  series_id <- series
-  api <- "&api_key=76bb1186e704598b725af0a27159fdfc"
-  type <- "&file_type=json"
-  base_url <- paste()
-  
-  return base_url
-}
-
-get_units <- function() {
-  return units
-}
-
-set_units <- function(units) {
-  units <- 
-}
-
-get_vintages <- function(series_id) {
-  
-}
+# }  
 
 base_url <- "http://api.stlouisfed.org/fred/series/observations?series_id="
 
@@ -46,7 +24,7 @@ vintage <- TRUE
 if (vintage == TRUE) {
   full_url <- paste(base_url,series_id, url_api, units, type, sep="")
 } else {
-  full_url <- paste(base_url,series_id, url_api, type, sep="")
+  full_url <- paste(base_url,series_id, url_api, units, type, sep="")
 }
 
 # Load JSON object
