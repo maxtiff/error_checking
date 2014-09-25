@@ -24,3 +24,4 @@ get_magnitude <- function(data) {
   data <- as.numeric(data)
   return(10^(floor(log10(data))))
 }
+

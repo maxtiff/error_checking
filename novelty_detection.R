@@ -10,9 +10,14 @@ object <- getJSON('DGORDER')
 data <- get_data(object)
 metadata <- get_metadata(object)
 
-abs_val<- lapply(data$value, abs)
+# Standarize data
+scaled.data <- scale(as.numeric(data$value))
+
+# Gathering range stats
+five.stats <- as.list(fivenum(scaled.data))
+quant <- as.list(quantile(scaled.data))
+                         
 window <- tail(abs_val, n=12)
-sd <- get_norm_behavior(window)
 
 # inspect_behavior
 
