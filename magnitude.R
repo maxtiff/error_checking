@@ -1,6 +1,6 @@
-get_magnitude <- function(data) {
+get_sd <- function(data) {
   
-  if (units == grep('pct1',units)) {
+#   if (units == grep('pct1',units)) {
     ## Calculate SD of percent change
     
     # Find mean
@@ -20,7 +20,11 @@ get_magnitude <- function(data) {
     
     # Take square root of divided sum of squares to get SD.
     sd_pct_chg <- sqrt(dvd_sum_sqrs)
-  }  
+#   }  
+}
+
+get_magnitude <- function(data) {
+  return(10^(ceiling(log10(data))))
 }
 
 units_level <- function(){}

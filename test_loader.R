@@ -1,9 +1,9 @@
 #### Create data frames
-getJSON <- function(id, units, vint) {
+getJSON <- function(id) {
 
   series_id <- id
-  unit <- units
-  vintage <- vint
+#   unit <- units
+#   vintage <- vint
   
   # Establish components of URL for API call
   base_url <- "http://api.stlouisfed.org/fred/series/observations?series_id="
@@ -11,13 +11,13 @@ getJSON <- function(id, units, vint) {
   type <- "&file_type=json"
   
   
-  full_url <- paste(base_url,series_id, url_api, units, type, sep="")
+  full_url <- paste(base_url,series_id, url_api, type, sep="")
   
   # Pull JSON from API
   object <- fromJSON(full_url)
   
   # Convert JSON object to data frame for processing
-  data <- data.frame(doc$observations)
+  data <- data.frame(object$observations)
   
   # Drop realtime start and end
   drops <- c("realtime_start","realtime_end")
@@ -39,6 +39,6 @@ getJSON <- function(id, units, vint) {
   ###########################################################################################
 }
 
-get_stats(x) {
+get_stats <- function(x) {
   # pulls information about series from downloaded JSON object
 }
