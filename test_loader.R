@@ -14,7 +14,11 @@ getJSON <- function(id) {
   full_url <- paste(base_url,series_id, url_api, type, sep="")
   
   # Pull JSON from API
-  object <- fromJSON(full_url)
+  return(fromJSON(full_url))
+} 
+
+get_data <- function(object) {
+  ##Input json object from getJSON()
   
   # Convert JSON object to data frame for processing
   data <- data.frame(object$observations)
@@ -39,6 +43,7 @@ getJSON <- function(id) {
   ###########################################################################################
 }
 
-get_stats <- function(x) {
+get_metadata <- function(object) {
   # pulls information about series from downloaded JSON object
+  return(data.frame(rbind(object$observation_start,object$observation_end,object$units)))  
 }
