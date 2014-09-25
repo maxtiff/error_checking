@@ -1,12 +1,11 @@
-## Fix to be os agnostic
+## Fix to be os and user agnostic.
 # setwd()
 
 ## Source all required scripts.
 required_scripts <- c('test_loader.R', 'normal_behavior.R')
 sapply(required_scripts, source, .GlobalEnv)
 
-source('test_loader.R')
-source('normal_behavior.R')
+## Begin analysis ... 
 object <- getJSON('DGORDER')
 data <- get_data(object)
 metadata <- get_metadata(object)
@@ -19,3 +18,4 @@ sd <- get_norm_behavior(window)
 
 test_mag <- get_magnitude(window)
 to_binary <- lapply(test_mag,intToBits)
+cache

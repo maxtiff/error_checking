@@ -2,7 +2,6 @@
 getJSON <- function(id) {
 
   series_id <- id
-#   unit <- units
 #   vintage <- vint
   
   # Establish components of URL for API call
