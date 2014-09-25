@@ -8,10 +8,11 @@ getJSON <- function(id) {
   # Establish components of URL for API call
   base_url <- "http://api.stlouisfed.org/fred/series/observations?series_id="
   url_api <- "&api_key=76bb1186e704598b725af0a27159fdfc"
+  unit <- '&units=pch'
   type <- "&file_type=json"
   
   
-  full_url <- paste(base_url,series_id, url_api, type, sep="")
+  full_url <- paste(base_url,series_id, url_api, unit, type, sep="")
   
   # Pull JSON from API
   return(fromJSON(full_url))
