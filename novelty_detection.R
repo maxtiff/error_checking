@@ -23,4 +23,5 @@ window <- tail(abs_val, n=12)
 
 test_mag <- get_magnitude(window)
 to_binary <- lapply(test_mag,intToBits)
+
 cache

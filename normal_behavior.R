@@ -25,3 +25,7 @@ get_magnitude <- function(data) {
   return(10^(floor(log10(data))))
 }
 
+detect_outlier <- function(x) {
+  
+}
+
