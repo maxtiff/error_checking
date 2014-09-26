@@ -1,4 +1,4 @@
-## Fix to be os and user agnostic.
+## Fix to be os and user agnostic. Certain inputs will be pulled from data file.
 # setwd()
 
 ## Source all required scripts.
@@ -6,22 +6,22 @@ required.scripts <- c('test_loader.R', 'normal_behavior.R')
 sapply(required.scripts, source, .GlobalEnv)
 
 ## Begin analysis ... 
-object <- get.JSON('DGORDER')
+
+# Collect time series data that sufficiently exhibits the normal behavior of the system.
+series <- 'DGORDER'
+object <- get.JSON(series)
 data <- get.data(object)
-metadata <- get.metadata(object)
+metadata <- get.metadata(series)
 
-# Standarize data
-scaled.data <- scale(as.numeric(data$value))
+# Gathering range stats to determine range of variation
+five.stats <- as.list(fivenum(data$value))
 
-length(scaled.data)
+## Convert to binary
+# to.binary <- lapply(data$value,intToBits)
 
-# Gathering range stats
-five.stats <- as.list(fivenum(scaled.data))
-quant <- as.list(quantile(scaled.data))
-                         
-window <- tail(scaled.data, n=12)
+window <- tail(data, n=12)
 
-# Convert to binary
-to.binary <- lapply(window,intToBits)
-
-
+# Visualize series
+ggplot(data=data, aes(x=date,y=value)) + 
+  geom_line(colour="blue", size=.6) + 
+  geom_point(colour="black", size=4, shape=21, fill="white")
