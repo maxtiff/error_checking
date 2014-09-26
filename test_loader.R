@@ -2,74 +2,71 @@
 ##    Improve documentation universality, and naming conventions.
 ##                                                          
 
-setBaseURL <- function() {
+set.BaseURL <- function() {
 
   return("http://api.stlouisfed.org/fred")
   
-  series/observations?
-  url_api <- "api_key=76bb1186e704598b725af0a27159fdfc"
-  unit <- '&units=pch'
-  type <- "&file_type=json"
-  
-  return(paste(base_url,url_api,unit, type, sep=""))
 }
 
-## Call URL
-getBaseURL <- function() {
+get.BaseURL <- function() {
   
-  return(setBaseURL())
+  return(set.BaseURL())
   
 }
 
-getTypeDir <- function() {
+get.TypeDir <- function() {
 
-  base_url <- getBaseURL()
-  
-  dir <- 'series'
-  
-  return(paste(base_url, dir, sep="/"))
-  
-}
-
-getType <- function() {
-  
-  type_url <- getTypeDir()
-  
+  base<- get.BaseURL()  
+  dir <- 'series'  
   type <- 'observations'
   
-  return(paste(type_url,type,sep="/"))
+  return(paste(base, dir, type, sep="/"))
+  
 }
 
-getAPIKey <- function() {
+set.APIKey <- function() {
+  
   return("api_key=76bb1186e704598b725af0a27159fdfc")
+  
 }
 
-getURL <- function() {
-  base <- getType()
-  key <- getAPIKey()
-    
+get.APIkey <- function() {
+  
+  base <- get.TypeDir()  
+  key <- set.APIKey()
+  
   return(paste(base,key,sep="?"))
 }
 
+get.finalURL <- function() {
+  
+  base <- get.APIkey()
+  units <- "units=pch"  
+  file.type <- "file_type=json"
+  
+  return(paste(base,units,file.type,sep='&'))
+}
 
 ## Create data frames
-getJSON <- function(id) {
-  base_url <- getURL()
-  series_url<- paste('base_url','&series_id=',id,sep="")
-
-  return(fromJSON(series_url))
+get.JSON <- function(id) {
+  
+  base<- get.finalURL()  
+  series<- paste(base,'&series_id=',id,sep="")
+  
+  return(fromJSON(series))
 } 
 
-getVintageDates <- function(id) {
+get.VintageDates <- function(id, vint) {
   
   ## This funciton is for testing and demonstration purposes only.
   base_url <- getURL()
   series_id <- id
   vintage <- vint
   
+  
 }
 
-get_data <- function(object) {
+get.data <- function(object) {
   ##Input json object from getJSON()
   
   # Convert JSON object to data frame for processing
@@ -82,7 +79,7 @@ get_data <- function(object) {
   # Convert observation date to appropriate format for time-series analysis
   data$date <- strptime(data$date, format="%Y-%m-%d")
   
-  # Convert
+  # Convert to scaled
   data$value <- as.numeric(data$value)
   
   # Drop NA values.
@@ -95,7 +92,7 @@ get_data <- function(object) {
   ###########################################################################################
 }
 
-get_metadata <- function(object) {
+get.metadata <- function(object) {
   # pulls information about series from downloaded JSON object
   return(data.frame(rbind(object$observation_start,object$observation_end,object$units)))  
 }
