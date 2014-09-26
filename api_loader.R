@@ -53,8 +53,14 @@ get.Units <- function() {
 
 set.fileType <- function() {
   base <- "file_type"
-  type <- "JSON"
-  return(paste(base,type,sep=""))
+  type <- "json"
+  return(paste(base,type,sep="="))
+  
+}
+
+get.fileType <- function() {
+  
+  return(set.fileType())
   
 }
 
@@ -65,7 +71,7 @@ set.APIKey <- function() {
   
 }
 
-get.APIkey <- function() {
+get.APIKey <- function() {
   
   return(set.APIKey())
   
@@ -105,10 +111,13 @@ get.metadata <- function(series) {
   # needs restructured
   base <- get.dirURL()
   key <- get.APIKey()
-  api <- paste('?',key,sep="")
-  series_id <- paste('&series_id=',series,sep="")
-  
-  return(paste(base,api,series_id,sep=""))
+  api <- paste(base,key,sep="?")
+  series.base <- "series_id"
+  series.id <- paste(series.base,series,sep="=")
+  file.type <- get.fileType()
+  meta.url <- paste(api,series.id,file.type,sep="&")
+
+  return(fromJSON(meta.url))
 }
 
 ## Create data frames
