@@ -99,7 +99,7 @@ get.dirURL <- function() {
   
 }
 
-
+## Type url setter and getter <<- http://api.stlouisfed.org/fred/series/observations
 set.typeURL <- function() {
   
   base <- get.dirURL()
@@ -115,6 +115,7 @@ get.typeURL <- function() {
   
 }
 
+## Pull metadata JSON file to determine appropriate window size.
 get.metadata <- function(series) {
   # pulls information about series from API
   # needs restructured
@@ -129,7 +130,7 @@ get.metadata <- function(series) {
   return(fromJSON(meta.url))
 }
 
-
+## Url to pull series observations
 set.finalURL<- function() {
   
   base <- get.typeURL()
@@ -157,6 +158,7 @@ get.JSON <- function(id) {
   return(fromJSON(series))
 } 
 
+## Pull vintages for initial analysis
 get.VintageDates <- function(id, vint) {
   
   ## This funciton is for testing and demonstration purposes only.
@@ -167,6 +169,7 @@ get.VintageDates <- function(id, vint) {
   
 }
 
+## Convert JSON file to data frame and scale values
 get.data <- function(object) {
   ##Input json object from getJSON()
   
