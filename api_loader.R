@@ -16,10 +16,7 @@ get.BaseURL <- function() {
 
 set.Dir <- function() {
   
-  base <- get.BaseURL()
-  dir <- 'series'
-  
-  return(paste(base,dir, sep="/"))
+  return('series')
   
 }
 
@@ -37,16 +34,14 @@ set.Type <- function() {
 
 get.Type <- function() {
 
-  base<- get.Dir()    
-  type <- set.Type()
-  
-  return(paste(base, type, sep="/"))
+  return(set.Type())
   
 }
 
 set.Units <- function() {
-  
-  return("units=pch")
+  base <- "units"
+  units <- "pch"
+  return(paste(base,units,sep="="))
   
 }
 
@@ -56,34 +51,64 @@ get.Units <- function() {
   
 }
 
-set.APIKey <- function() {
+set.fileType <- function() {
+  base <- "file_type"
+  type <- "JSON"
+  return(paste(base,type,sep=""))
   
-  return("api_key=76bb1186e704598b725af0a27159fdfc")
+}
+
+set.APIKey <- function() {
+  base <- "api_key"
+  key <- "76bb1186e704598b725af0a27159fdfc"
+  return(paste(base,key,sep="="))
   
 }
 
 get.APIkey <- function() {
   
-  base <- get.Type()  
-  key <- set.APIKey()
-  
-  return(paste(base,key,sep="?"))
-}
-
-set.finalURL <- function() {
-  
-  base <- get.APIkey()
-  units <- "units=pch"  
-  file.type <- "file_type=json"
-  
-  return(paste(base,units,file.type,sep='&'))
+  return(set.APIKey())
   
 }
 
-get.finalURL <- function() {
+set.dirURL <- function() {
   
-  return(set.finalURL())
+  base <- get.BaseURL()
+  dir <- get.Dir()
   
+  return(paste(base,dir,sep="/"))
+}
+
+get.dirURL <- function() {
+  
+  return(set.dirURL())
+  
+}
+
+set.typeURL <- function() {
+  
+  base <- get.dirURL()
+  type <- get.Type()
+  
+  return(paste(base,type,sep="/"))
+  
+}
+
+get.typeURL <- function() {
+  
+  return(set.typeURL())
+  
+}
+
+get.metadata <- function(series) {
+  # pulls information about series from API
+  # needs restructured
+  base <- get.dirURL()
+  key <- get.APIKey()
+  api <- paste('?',key,sep="")
+  series_id <- paste('&series_id=',series,sep="")
+  
+  return(paste(base,api,series_id,sep=""))
 }
 
 ## Create data frames
@@ -132,15 +157,4 @@ get.data <- function(object) {
   ###########################################################################################
   ##### The data frame should be immutable at this point! Do not attempt to change it! ######
   ###########################################################################################
-}
-
-get.metadata <- function(series) {
-  # pulls information about series from API
-  # needs restructured
-  base <- get.Dir()
-  key <- set.APIKey()
-  api <- paste('?',key,sep="")
-  series_id <- paste('&series_id=',series,sep="")
-  
-  return(paste(base,api,series_id,sep=""))
 }
