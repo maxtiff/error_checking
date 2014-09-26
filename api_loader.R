@@ -2,6 +2,7 @@
 ##    Improve documentation universality, and naming conventions.
 ##                                                          
 
+## Base url setters and getters
 set.BaseURL <- function() {
 
   return("http://api.stlouisfed.org/fred")
@@ -14,6 +15,8 @@ get.BaseURL <- function() {
   
 }
 
+
+## Series directory setter and getter
 set.Dir <- function() {
   
   return('series')
@@ -26,6 +29,7 @@ get.Dir <- function() {
   
 }
 
+##Type, i.e. 'observations', setter and getter
 set.Type <- function() {
   
   return('observations')
@@ -38,6 +42,7 @@ get.Type <- function() {
   
 }
 
+## Units setter and getter
 set.Units <- function() {
   base <- "units"
   units <- "pch"
@@ -51,6 +56,7 @@ get.Units <- function() {
   
 }
 
+## File type setter and getter
 set.fileType <- function() {
   base <- "file_type"
   type <- "json"
@@ -64,6 +70,7 @@ get.fileType <- function() {
   
 }
 
+## API key setter and getter
 set.APIKey <- function() {
   base <- "api_key"
   key <- "76bb1186e704598b725af0a27159fdfc"
@@ -77,6 +84,7 @@ get.APIKey <- function() {
   
 }
 
+## Directory url setter and getter <<- http://api.stlouisfed.org/fred/series
 set.dirURL <- function() {
   
   base <- get.BaseURL()
@@ -90,6 +98,7 @@ get.dirURL <- function() {
   return(set.dirURL())
   
 }
+
 
 set.typeURL <- function() {
   
@@ -127,7 +136,8 @@ set.finalURL<- function() {
   key <- get.APIKey()
   api <- paste(base,key,sep="?")
   file.type <- get.fileType()
-  url <- paste(api,file.type,sep="&")
+  units <- get.Units()
+  url <- paste(api,file.type,units,sep="&")
   return(url)
   
 }

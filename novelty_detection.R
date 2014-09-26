@@ -5,6 +5,9 @@
 required.scripts <- c('api_loader.R', 'normal_behavior.R')
 sapply(required.scripts, source, .GlobalEnv)
 
+## Load required libraries
+library(jsonlite)
+library(ggplot2)
 ## Begin analysis ... 
 
 # Collect time series data that sufficiently exhibits the normal behavior of the system.
@@ -14,7 +17,7 @@ data <- get.data(object)
 metadata <- get.metadata(series)
 
 # Gathering range stats to determine range of variation
-five.stats <- as.list(fivenum(data$value))
+five.stats <- as.list(fivenum(scaled.data))
 
 ## Convert to binary
 # to.binary <- lapply(data$value,intToBits)
