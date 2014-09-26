@@ -120,6 +120,24 @@ get.metadata <- function(series) {
   return(fromJSON(meta.url))
 }
 
+
+set.finalURL<- function() {
+  
+  base <- get.typeURL()
+  key <- get.APIKey()
+  api <- paste(base,key,sep="?")
+  file.type <- get.fileType()
+  url <- paste(api,file.type,sep="&")
+  return(url)
+  
+}
+
+get.finalURL <- function() {
+  
+  return(set.finalURL())
+  
+}
+
 ## Create data frames
 get.JSON <- function(id) {
   
