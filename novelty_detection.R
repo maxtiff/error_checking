@@ -2,29 +2,32 @@
 # setwd()
 
 ## Source all required scripts.
-required.scripts <- c('api_loader.R', 'normal_behavior.R')
+required.scripts <- c('api_loader.R','normal_behavior.R')
 sapply(required.scripts, source, .GlobalEnv)
 
 ## Load required libraries
 library(jsonlite)
-library(ggplot2)
+# library(ggplot2)
+
+
 ## Begin analysis ... 
 
 # Collect time series data that sufficiently exhibits the normal behavior of the system.
+# Data is standardized into z-score.
 series <- 'DGORDER'
 object <- get.JSON(series)
 data <- get.data(object)
 metadata <- get.metadata(series)
 
-# Gathering range stats to determine range of variation
-five.stats <- as.list(fivenum(scaled.data))
+# Create non-overlapping windows.
+# freq <- determine.freq(metadata)
+# test <- create.windows(data, freq)
 
-## Convert to binary
-# to.binary <- lapply(data$value,intToBits)
+# Detect outliers.
+test <- detect.outliers(data$value)
 
-window <- tail(data, n=12)
 
-# Visualize series
-ggplot(data=data, aes(x=date,y=value)) + 
-  geom_line(colour="blue", size=.6) + 
-  geom_point(colour="black", size=4, shape=21, fill="white")
+# For tests: Visualize series
+# ggplot(data=data, aes(x=date,y=value)) + 
+#   geom_line(colour="blue", size=.6) + 
+#   geom_point(colour="black", size=4, shape=21, fill="white")
