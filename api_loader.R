@@ -44,6 +44,7 @@ get.Type <- function() {
 
 ## Units setter and getter. Set to 'change' by default/
 set.Units <- function() {
+  
   base <- "units"
   units <- "chg"
   return(paste(base,units,sep="="))
@@ -58,6 +59,7 @@ get.Units <- function() {
 
 ## File type setter and getter
 set.fileType <- function() {
+  
   base <- "file_type"
   type <- "json"
   return(paste(base,type,sep="="))
@@ -72,6 +74,7 @@ get.fileType <- function() {
 
 ## API key setter and getter
 set.APIKey <- function() {
+  
   base <- "api_key"
   key <- "76bb1186e704598b725af0a27159fdfc"
   return(paste(base,key,sep="="))
@@ -117,6 +120,7 @@ get.typeURL <- function() {
 
 ## Pull metadata JSON file to determine appropriate window size.
 get.metadata <- function(series) {
+  
   # pulls information about series from API
   # needs restructured
   base <- get.dirURL()
@@ -139,6 +143,7 @@ set.finalURL<- function() {
   file.type <- get.fileType()
   units <- get.Units()
   url <- paste(api,file.type,units,sep="&")
+  
   return(url)
   
 }
@@ -149,19 +154,31 @@ get.finalURL <- function() {
   
 }
 
-## Create data frames
 get.JSON <- function(id) {
   
   base<- get.finalURL()  
   series<- paste(base,'&series_id=',id,sep="")
   
-  return(fromJSON(series))
+  # Get json from url. Error out if url is not successful.
+  if (url_success(series) == TRUE) {
+    
+    return(fromJSON(series))
+    
+  } else if (url_success(series) == FALSE) {
+    
+    print("There was an issue when calling the API. Please check that the series id is correct.")
+    # Insert error trapping
+    
+  } else {
+    
+    return("something has gone horribly awry. turn back, now.")
+    
+  }
+  
 } 
-
 
 ## Convert JSON file to data frame and scale values
 get.data <- function(object) {
-  ##Input json object from getJSON()
   
   # Convert JSON object to data frame for processing
   data <- data.frame(object$observations)

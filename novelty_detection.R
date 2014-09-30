@@ -7,6 +7,7 @@ sapply(required.scripts, source, .GlobalEnv)
 
 ## Load required libraries
 library(jsonlite)
+library(httr)
 # library(ggplot2)
 
 
@@ -20,8 +21,9 @@ data <- get.data(object)
 metadata <- get.metadata(series)
 
 # Create non-overlapping windows.
-# freq <- determine.freq(metadata)
-# test <- create.windows(data, freq)
+  # Need to break into windows around observations that are revised.
+  # freq <- determine.freq(metadata)
+  # test <- create.windows(data, freq)
 
 # Detect outliers.
 test <- detect.outliers(data$value)

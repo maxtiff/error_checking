@@ -79,6 +79,7 @@ detect.outliers <- function(data,plot=TRUE) {
     x2[score>0] <- x[score>0]
     tsp(x2) <- tsp(x)
     points(x2,pch=19,col="red")
+    
     return(invisible(score))
   }
   else if (sum(score) > 0) {
