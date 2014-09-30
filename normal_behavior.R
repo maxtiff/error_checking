@@ -1,29 +1,4 @@
 
-# get_norm_behavior <- function(data) {
-#   
-#   # Find mean
-#   mean <- mean(as.numeric(data))
-#   
-#   # Find distance from mean for each observation via anonymous function
-#   diff <- lapply(data, function(x) x - mean)
-#   
-#   # Sqr values in data  
-#   sqr <- lapply(diff, function(x) x^2)
-#   
-#   # Sum the values of all squared observations
-#   sqr_sum <- sum(as.numeric(sqr))
-#   
-#   # Find divided sum of squares
-#   dvd_sum_sqrs <- sqr_sum/(as.numeric(length(sqr)-1))
-#   
-#   # Take square root of divided sum of squares to get SD.
-#   return(sqrt(dvd_sum_sqrs))
-# }
-
-# get_magnitude <- function(data) {
-#   data <- as.numeric(data)
-#   return(10^(floor(log10(data))))
-# }
 
 determine.freq <- function(object) {
   
@@ -32,17 +7,24 @@ determine.freq <- function(object) {
 }
 
 create.windows <- function(data, frequency) {
-  
+  ## Needs to be rebuilt to check around new observations and revisions, as opposed to the entire time series as it now stands.
   ln <- length(data$value)
   freq <- frequency
   
   if (freq == 'M') {
+    
     interval <- ceiling(ln/12)
+    
     return(rollapply(data$value,width=interval,diff(quantile(data$value,)),by=interval))
+    
   } else if (is.null(data)) {
+    
     return('fail')
+    
   } else {
+    
     return('something wrong')
+    
   }
   
 }
@@ -83,9 +65,13 @@ detect.outliers <- function(data,plot=TRUE) {
     return(invisible(score))
   }
   else if (sum(score) > 0) {
+    
     return(score)
+    
   } else {
+    
     return("No anomalies have been detected.")
+    
   }
   
 }

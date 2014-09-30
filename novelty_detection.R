@@ -21,9 +21,14 @@ data <- get.data(object)
 metadata <- get.metadata(series)
 
 # Create non-overlapping windows.
-  # Need to break into windows around observations that are revised.
+  # Need to break into windows around observations that are revised or new.
   # freq <- determine.freq(metadata)
   # test <- create.windows(data, freq)
 
 # Detect outliers.
-test <- detect.outliers(data$value)
+score <- detect.outliers(data$value)
+
+# For tests: Visualize series
+# ggplot(data=data, aes(x=date,y=value)) + 
+#   geom_line(colour="blue", size=.6) + 
+#   geom_point(colour="black", size=4, shape=21, fill="white")

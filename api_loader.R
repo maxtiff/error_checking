@@ -168,11 +168,12 @@ get.JSON <- function(id) {
     
     print("There was an issue when calling the API. Please check that the series id is correct.")
     # Insert error trapping
+    quit()
     
   } else {
     
     return("something has gone horribly awry. turn back, now.")
-    
+    quit()
   }
   
 } 
