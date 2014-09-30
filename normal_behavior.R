@@ -63,8 +63,12 @@ detect.outliers <- function(data,plot=TRUE) {
   
   ## Break into quantiles for outlier detection and score observations on severity.
   resid.q <- quantile(resid,prob=c(0.1,0.9))
+  
+  ## Establish interquantile range
   iqr <- diff(resid.q)
   limits <- resid.q + 1.5*iqr*c(-1,1)
+  
+  ## Determine score of data point
   score <- abs(pmin((resid-limits[1])/iqr,0) + pmax((resid - limits[2])/iqr,0))
   
   ## Plot outliers on TS graph.
@@ -77,8 +81,11 @@ detect.outliers <- function(data,plot=TRUE) {
     points(x2,pch=19,col="red")
     return(invisible(score))
   }
-  else
+  else if (sum(score) > 0) {
     return(score)
+  } else {
+    return("No anomalies have been detected.")
+  }
   
 }
 

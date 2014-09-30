@@ -42,10 +42,10 @@ get.Type <- function() {
   
 }
 
-## Units setter and getter
+## Units setter and getter. Set to 'change' by default/
 set.Units <- function() {
   base <- "units"
-  units <- "pch"
+  units <- "chg"
   return(paste(base,units,sep="="))
   
 }
@@ -158,16 +158,6 @@ get.JSON <- function(id) {
   return(fromJSON(series))
 } 
 
-## Pull vintages for initial analysis
-get.VintageDates <- function(id, vint) {
-  
-  ## This funciton is for testing and demonstration purposes only.
-  base <- get.finalURL()
-  series <- id
-  vintage <- vint
-  
-  
-}
 
 ## Convert JSON file to data frame and scale values
 get.data <- function(object) {
