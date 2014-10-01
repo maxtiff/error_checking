@@ -1,5 +1,4 @@
 
-
 determine.freq <- function(object) {
   
   return(as.list(object$seriess['frequency_short']))
@@ -44,11 +43,11 @@ detect.outliers <- function(data,plot=TRUE) {
   }
   
   ## Break into quantiles for outlier detection and score observations on severity.
-  resid.q <- quantile(resid,prob=c(0.1,0.9))
+  resid.q <- quantile(resid,prob=c(0.2,0.8))
   
   ## Establish interquantile range
   iqr <- diff(resid.q)
-  limits <- resid.q + 1.5*iqr*c(-1,1)
+  limits <- resid.q + 2*iqr*c(-1,1)
   
   ## Determine score of data point
   score <- abs(pmin((resid-limits[1])/iqr,0) + pmax((resid - limits[2])/iqr,0))
@@ -63,7 +62,9 @@ detect.outliers <- function(data,plot=TRUE) {
     points(x2,pch=19,col="red")
     
     return(invisible(score))
+    
   }
+  ## Check value of score.
   else if (sum(score) > 0) {
     
     return(score)
@@ -76,4 +77,16 @@ detect.outliers <- function(data,plot=TRUE) {
   
 }
 
-
+check.revisions <- function(vintage,update) {
+  
+  old.obs <- head(update, n=-1)
+  
+  if (identical(vintage,old.obs) == TRUE) {
+    # continue
+  } else if (identical(vintage,old.obs) == FALSE) {
+    # mark which observations have revised.
+  } else {
+    print("Error. Exiting")
+    exit()
+  }
+}
