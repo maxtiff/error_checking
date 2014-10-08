@@ -26,20 +26,25 @@ metadata <- get.metadata(series)
 ## Detect outliers (modify to detect outliers in windows).
 score <- detect.outliers(data$value)
 
-if (score == < 1) {
+if (sum(score) < 1) {
 
   exit()
 
-} else if (score > 1) {
+} else if (sum(score) > 1) {
 
-  window.size <- 5
+  ## Count how many obs total, and handle obs remaining.
   series.length <- length(data$value)
+  remaining.obs <- series.length
 
-  ## Establish number of windows over span of time series
+  ## Establish number of windows over span of time series.
+  ## 10 is chosen to prevent errors surrounding degrees of freedom.
+  window.size <- 10
   total.windows <- ceiling(series.length/window.size)
 
+  ## Counter variables (this is bad practice).
   i <- 1
   n <- 0
+
   cum.score <- 0
 
   ## Sequence along windows of time series. Adjust to prevent subscript out of bounds.
@@ -55,7 +60,6 @@ if (score == < 1) {
       print(score)
 
     } else if (n > 0) {
-
       score <- detect.outliers(data$value[n:(n+window.size),])
       cum.score <- cum.score + score
       print(score)
@@ -63,6 +67,7 @@ if (score == < 1) {
     }
 
     n <- n + window.size
+    remaining.obs <- remaining.obs - window.size
 
   }
 
@@ -78,9 +83,9 @@ if (score == < 1) {
 }
 
 ## Pull out windows with positive outlier scores.
-if (cum.score) > 0) {
-  print(cum.score))
-} else if (cum.score) == 0) {
+if (cum.score > 0) {
+  print(cum.score)
+} else if (cum.score == 0) {
   # continue
 } else {
   print("Something has gone wrong")
@@ -94,7 +99,8 @@ if (cum.score) > 0) {
 
 
 ## Forecast testing
-# test.object <- fromJSON('http://api.stlouisfed.org/fred/series/observations?api_key=76bb1186e704598b725af0a27159fdfc&file_type=json&units=lin&vintage_dates=2014-08-26&series_id=DGORDER')
+# test.object <- fromJSON('http://api.stlouisfed.org/fred/series/observations?api_key=76bb1186e704598b725af0a27159fdfc//
+#                &file_type=json&units=lin&vintage_dates=2014-08-26&series_id=DGORDER')
 # test.data <- data.frame(test.object$observations)
 # View(test.data)
 # get.data(test.data)
@@ -108,36 +114,3 @@ if (cum.score) > 0) {
 # test.data <-head(test.data, n=-1)
 # test.score <- detect.outliers(test.data$value)
 # forecast(as.ts(test.data$value))
-
-
-##  Test for sliding window algorithim.
-## Sliding window test, window size of 10, otherwise span is too small for accurate detection.
-window.size <- 5
-series.length <- length(data$value)
-
-## Establish number of windows over span of time series
-total.windows <- ceiling(series.length/window.size)
-
-i <- 1
-n <- 0
-for (i in seq_along(data$value)) {
-  print(i)
-  i <- i + 1
-  if (n == 0) {
-    score <- detect.outliers(data$value[n:window.size + n,])
-    print(score)
-  } else if (n > 0) {
-    score <- detect.outliers(data$value[n:(n+window.size),])
-    print(score)
-  }
-  n <- n + window.size
-}
-
-
-
-
-
-
-
-
-

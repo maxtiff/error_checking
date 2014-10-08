@@ -43,11 +43,11 @@ detect.outliers <- function(data,plot=TRUE) {
   }
 
   ## Break into quantiles for outlier detection and score observations on severity.
-  resid.q <- quantile(resid,prob=c(0.1,0.9))
+  resid.q <- quantile(resid,prob=c(0.2,0.8))
 
   ## Establish interquantile range
   iqr <- diff(resid.q)
-  limits <- resid.q + 1.5*iqr*c(-1,1)
+  limits <- resid.q + 2*iqr*c(-1,1)
 
   ## Determine score of data point
   score <- abs(pmin((resid-limits[1])/iqr,0) + pmax((resid - limits[2])/iqr,0))
