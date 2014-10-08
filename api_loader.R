@@ -222,8 +222,8 @@ get.data <- function(object) {
   # Convert observation date to appropriate format for time-series analysis
   data$date <- strptime(data$date, format="%Y-%m-%d")
 
-  # Convert to numeric type
-  data$value <- as.numeric(data$value)
+  # Convert to numeric type, ignore NA coercion warning
+  data$value <- suppressWarnings(as.numeric(data$value))
 
   # Drop NA values.
   data <- na.omit(data)
