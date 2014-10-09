@@ -49,8 +49,8 @@ detect.outliers <- function(data,plot=TRUE) {
   iqr <- diff(resid.q)
   limits <- resid.q + 2*iqr*c(-1,1)
 
-  ## Determine score of data point
-  score <- abs(pmin((resid-limits[1])/iqr,0) + pmax((resid - limits[2])/iqr,0))
+  ## Determine score of data point. Only examine scores above 1.
+  score <- floor(abs(pmin((resid-limits[1])/iqr,0) + pmax((resid - limits[2])/iqr,0)))
 
   ## Plot outliers on TS graph.
   if(plot)

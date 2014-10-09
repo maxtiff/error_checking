@@ -12,85 +12,46 @@ library(forecast)
 library(ggplot2)
 
 
-### Begin analysis ...
+#### Begin analysis ...
 
-## Collect time series data that sufficiently exhibits the normal behavior of the system.
-# Data is standardized into z-score.
-series <- 'dgorder'
+### Collect time series data that sufficiently exhibits the normal behavior of the system.
+## Data is standardized into z-score.
+series <- 'ECOMNSA'
 object <- get.JSON(series)
 data <- get.data(object)
 metadata <- get.metadata(series)
 
-### Create non-overlapping windows.
-
-## Detect outliers (modify to detect outliers in windows).
+### Detect outliers (modify to detect outliers in windows).
 score <- detect.outliers(data$value)
 
-if (sum(score) < 1) {
+### Create non-overlapping windows.
+## Count how many obs total, and handle obs remaining.
+series.length <- length(data$value)
+remaining.obs <- series.length
 
-  exit()
+## Establish number of windows over span of time series.
+## 10 is chosen to prevent errors surrounding degrees of freedom.
+window.size <- 10
+complete.windows <- floor(series.length/window.size)
+remainder <- series.length%%window.size
+slider <- 9
 
-} else if (sum(score) > 1) {
+## Counter variables for window coordinates in list (this is bad practice).
+n <- 1
 
-  ## Count how many obs total, and handle obs remaining.
-  series.length <- length(data$value)
-  remaining.obs <- series.length
+## Sequence along windows of time series. Adjust to prevent subscript out of bounds.
+for (i in seq_along(data$value)) {
 
-  ## Establish number of windows over span of time series.
-  ## 10 is chosen to prevent errors surrounding degrees of freedom.
-  window.size <- 10
-  total.windows <- ceiling(series.length/window.size)
+  print(i)
 
-  ## Counter variables (this is bad practice).
-  i <- 1
-  n <- 0
+  score <- detect.outliers(data$value[n:(n+window.size-1),])
+  print(score)
 
-  cum.score <- 0
-
-  ## Sequence along windows of time series. Adjust to prevent subscript out of bounds.
-  for (i in seq_along(data$value)) {
-
-    print(i)
-    i <- i + 1
-
-    if (n == 0) {
-
-      score <- detect.outliers(data$value[n:window.size + n,])
-      cum.score <- cum.score + score
-      print(score)
-
-    } else if (n > 0) {
-      score <- detect.outliers(data$value[n:(n+window.size),])
-      cum.score <- cum.score + score
-      print(score)
-
-    }
-
-    n <- n + window.size
-    remaining.obs <- remaining.obs - window.size
-
-  }
-
-}  else if (score == 0) {
-
-  #contine
-
-} else if (score < 0) {
-
-  print("Major error")
-  #log to report.
+  n <- n + slider
+  remaining.obs <- remaining.obs - window.size
 
 }
 
-## Pull out windows with positive outlier scores.
-if (cum.score > 0) {
-  print(cum.score)
-} else if (cum.score == 0) {
-  # continue
-} else {
-  print("Something has gone wrong")
-  exit()
-}
 
 # For tests: Visualize series
 # ggplot(data=data, aes(x=date,y=value)) +
