@@ -16,9 +16,10 @@ library(ggplot2)
 
 ### Collect time series data that sufficiently exhibits the normal behavior of the system.
 ## Data is standardized into z-score.
-series <- 'ECOMNSA'
+series <- 'frblmci'
 object <- get.JSON(series)
 data <- get.data(object)
+vintage <- get.vintage(series)
 metadata <- get.metadata(series)
 
 ### Detect outliers (modify to detect outliers in windows).
@@ -39,19 +40,28 @@ slider <- 9
 ## Counter variables for window coordinates in list (this is bad practice).
 n <- 1
 
-## Sequence along windows of time series. Adjust to prevent subscript out of bounds.
-for (i in seq_along(data$value)) {
+## Check if new data is identical to previous vintage up to the last observation.
+if (identical(tail(data$value, n=-1),vintage$value)) {
 
-  print(i)
+  score <- detect.outliers(tail(data$value, n = 10)
 
-  score <- detect.outliers(data$value[n:(n+window.size-1),])
-  print(score)
+} else {
 
-  n <- n + slider
-  remaining.obs <- remaining.obs - window.size
+  ## Sequence along windows of time series.
+  # Adjust to prevent subscript out of bounds.
+  for (i in seq_along(data$value)) {
+
+    print(i)
+
+    score <- detect.outliers(data$value[n:(n+window.size-1),])
+    print(score)
+
+    n <- n + slider
+    remaining.obs <- remaining.obs - window.size
+
+  }
 
 }
-
 
 # For tests: Visualize series
 # ggplot(data=data, aes(x=date,y=value)) +

@@ -135,7 +135,7 @@ get.metadata <- function(series) {
 
 }
 
-get.vintages <- function(series) {
+get.allvintages <- function(series) {
 
   base <- get.dirURL()
   type <- "vintagedates"
@@ -174,7 +174,7 @@ get.finalURL <- function() {
 
 }
 
-get.specificVintage <- function(date) {
+get.vintage <- function(date) {
 
   base <- get.finalURL()
   param <- "vintage_dates"
